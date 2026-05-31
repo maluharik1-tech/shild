@@ -1,0 +1,27 @@
+name: Build APK
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      # Cette étape va afficher tous les dossiers et fichiers trouvés
+      - name: Diagnostic - Lister les fichiers
+        run: ls -R
+          
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0'
+          
+      - name: Install dependencies
+        run: flutter pub get
+        
+      - name: Build APK
+        run: flutter build apk --release
+        
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
